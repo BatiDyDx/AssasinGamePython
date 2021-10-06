@@ -1,0 +1,36 @@
+CABA, Cordoba, 696.4
+CABA, Rio Cuarto, 617.8
+CABA, Rosario, 299.9 
+CABA, Santa Fe, 468.5
+CABA, Serodino, 349.8
+CABA, Villa Constitucion, 257
+CABA, Villa Gobernador Galvez, 293.1
+CABA, Villa Maria, 552.7
+Cordoba, Rio Cuarto, 212.8
+Cordoba, Rosario, 400.9 
+Cordoba, Santa Fe, 370
+Cordoba, Serodino, 399.5
+Cordoba, Villa Constitucion, 456.2
+Cordoba, Villa Gobernador Galvez, 410.3
+Cordoba, Villa Maria, 153.3
+Rio Cuarto, Rosario, 390.1
+Rio Cuarto, Santa Fe, 433.6
+Rio Cuarto, Serodino, 388.7
+Rio Cuarto, Villa Constitucion, 418.4 
+Rio Cuarto, Villa Gobernador Galvez, 399.5
+Rio Cuarto, Villa Maria, 133.7
+Rosario, Santa Fe, 346.5
+Rosario, Serodino, 54.6
+Rosario, Villa Constitucion, 59.7
+Rosario, Villa Gobernador Galvez, 13.9
+Rosario, Villa Maria, 257.5 
+Santa Fe, Serodino, 143.9
+Santa Fe, Villa Constitucion, 228.3
+Santa Fe, Villa Gobernador Galvez, 182.5
+Santa Fe, Villa Maria, 302.7
+Serodino, Villa Constitucion, 110.4
+Serodino, Villa Gobernador Galvez, 64.6
+Serodino, Villa Maria, 255.1
+Villa Constitucion, Villa Gobernador Galvez, 53.7
+Villa Constitucion, Villa Maria, 313.4
+Villa Gobernador Galvez, Villa Maria, 268.2
