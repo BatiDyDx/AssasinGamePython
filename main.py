@@ -53,7 +53,9 @@ def generar_elementos_archivo(archivo, funcion_generadora):
 
 
 def duelo(jugador1, jugador2):
-    return random.choice([jugador1, jugador2])
+    peleadores = [jugador1, jugador2]
+    random.shuffle(peleadores)
+    return peleadores
 
 
 def obtener_dist_localidades(distancias, localidad1, localidad2):
@@ -89,36 +91,38 @@ def jugada_en_misma_ciudad(lista_ciudades, jugadores, archivo_output):
 
 
 def jugar(ciudad, jugadores, archivo_output):
-    jugadores_ciudad = list(filter(lambda jugador:(jugador[2] == ciudad), jugadores))
+    jugadores_ciudad = list(filter(lambda jugador: (jugador[2] == ciudad), jugadores))
+    if len(jugadores_ciudad) == 1:
+        ganador = jugadores_ciudad[0]
+    elif len(jugadores_ciudad) == 0:
+        return tuple()
     with open(archivo_output, "a") as f:
         while len(jugadores_ciudad) > 1:
             jugador1 = random.choice(jugadores_ciudad)
             jugadores_ciudad.remove(jugador1)
             jugador2 = random.choice(jugadores_ciudad)
             jugadores_ciudad.remove(jugador2)
-            ganador = duelo(jugador1,jugador2)
-            perdedor = jugador1 if jugador2 == ganador else jugador2
-            #perdedor = [jugador1,jugador2].remove(ganador)
+            ganador, perdedor = duelo(jugador1,jugador2)
             jugadores_ciudad.append(ganador)
             linea = ganador[0] + " eliminó a " + perdedor[0] + "\n"
             f.write(linea)
     return ganador
 
-def jugada_por_regiones(lista_ciudades, ganadores_regionales, n,local_dist, archivo_output):
+
+def jugada_por_regiones(ciudades, ganadores_regionales, radio_maximo, local_dist, archivo_output):
     ganadores_locales = []
     peleadores_potenciales = []
     random.shuffle(ganadores_regionales)
     with open(archivo_output, "a") as f:
         for ganador_r in ganadores_regionales:
-            ciudades_cercanas = list(filter(lambda ciudad: distancia_valida(n, local_dist, ganador_r[2], ciudad), lista_ciudades))
+            ciudades_cercanas = list(filter(lambda ciudad: distancia_valida(radio_maximo, local_dist, ganador_r[2], ciudad), ciudades))
             if ciudades_cercanas == []:
                 ganadores_locales.append(ganador_r)
             for item in ganadores_regionales:
                 if item[2] in ciudades_cercanas:
                     peleadores_potenciales.append(item)
             jugador2 = random.choice(peleadores_potenciales)
-            ganador_final = duelo(ganador_r,jugador2)
-            perdedor = ganador_r if jugador2 == ganador_final else jugador2
+            ganador_final, perdedor = duelo(ganador_r,jugador2)
             linea = ganador_final[0] + " eliminó a " + perdedor[0] + "\n"
             f.write(linea)
     if ganadores_locales == []:
@@ -134,12 +138,12 @@ def anunciar_ganador(ganador, archivo_output):
 
 
 def anunciar_varios_ganadores(ganadores_locales, archivo_output):
-    anunciar_ganadores = "Los ganadores son: "
+    anuncio_ganadores = "Los ganadores son: "
     for ganador_local in ganadores_locales:
-        anunciar_ganadores += ganador_local[0] + ", " 
+        anuncio_ganadores += ganador_local[0] + ", " 
     with open(archivo_output, 'a') as f:
-        f.write(anunciar_ganadores)
-        f.write("\n" * 6)
+        f.write(anuncio_ganadores)
+        f.write("\n" * 3)
 
 
 def anunciar_ganador(ganador, archivo_output):
@@ -160,16 +164,16 @@ def main():
     archivo_jugadores, archivo_distancias = sys.argv[1:]
     
     # Pedimos como input el nombre del archivo de salida
-    archivo_output = obtener_archivo_salida()
-    
+    #archivo_output = obtener_archivo_salida()
+    archivo_output = "jugadas.txt"
     # Obtenemos N, la distancia máxima a realizar los enfrentamientos
-    N = obtener_dist_maxima()
-    
+    #N = obtener_dist_maxima()
+    N = 100
     # Definimos la lista de tuplas de la forma (nombre, edad, localidad)
     jugadores = generar_elementos_archivo(archivo_jugadores, crear_jugador)
 
     # Reducimos la cantidad de jugadores para realizar pruebas
-    jugadores = jugadores[:5000]
+    jugadores = jugadores[:200]
 
     # Separamos la lista de jugadores entre los que son menores y mayores de edad
     jugadores_menores, jugadores_mayores = separar_edades(jugadores)
