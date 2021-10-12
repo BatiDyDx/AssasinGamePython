@@ -15,6 +15,39 @@ def test_crear_dist_localidades():
     assert crear_dist_localidades("Santa Fe, Villa Maria, 302.7") == ("Santa Fe", "Villa Maria", 302.7)
     assert crear_dist_localidades("Rio Cuarto, Serodino, 388.7") == ("Rio Cuarto", "Serodino", 388.7)
 
+def test_separar_edades():
+    assert separar_edades([("juan",2,"rosario"),("rodofredo",40,"calafate")]) == [("juan",2,"rosario")],[("rodofredo",40,"calafate")]
+
+def test_generar_lista_jugadores():
+    assert generar_lista_jugadores("TestJug.txt") == []
+
+def test_generar_dict_distancias():
+    assert generar_dict_distancias("TestDist.txt") == {("CABA","Cordoba"):696.4,("CABA","Rio Cuarto"):617.8,("CABA","Rio Cuarto"):299.9}
+
+def test_obtener_dist_localidades():
+    dict_dist = {("CABA","Cordoba"):696.4,("CABA","Rio Cuarto"):617.8,("CABA","Rosario"):299.9}
+    assert obtener_dist_localidades(dict_dist,"CABA","Cordoba") == 696.4
+    assert obtener_dist_localidades(dict_dist,"CABA","Rosario") == 299.9
+    #assert obtener_dist_localidades(dict_dist,"CABA","San Juan") == 696.4
+
+def test_distancia_valida():
+    dict_dist = {("CABA","Cordoba"):696.4,("CABA","Rio Cuarto"):617.8,("CABA","Rosario"):299.9}
+    assert distancia_valida(700,dict_dist,"CABA","Cordoba") == True
+    assert distancia_valida(200,dict_dist,"CABA","Rosario") == False
+    assert distancia_valida(200,dict_dist,"CABA","Rio Cuarto") == True
+
+def test_obtener_set_ciudades():
+    dict_dist = {("CABA","Cordoba"):696.4,("CABA","Rio Cuarto"):617.8,("CABA","Rosario"):299.9}
+    assert obtener_set_ciudades(dict_dist) == set("CABA","Rio Cuarto","Rosario")
+
+def test_obtener_jugadores_por_ciudad():
+    set_ciudades = set("CABA","Rio Cuarto","Rosario")
+    jugadores = [("ROBERTO ALMEIDO",20,"Rosario"),("JUAN MANUEL",5,"Rio Cuarto"),("JOSE MIGUEL",1,"CABA")]
+    assert obtener_jugadores_por_ciudad(jugadores,set_ciudades) == {"CABA":[("JOSE MIGUEL",1,"CABA")],"Rio Cuarto":[("JUAN MANUEL",5,"Rio Cuarto")],"Rosario":[("ROBERTO ALMEIDO",20,"Rosario")]}
+
+def test_jugador_mas_cercano():
+    pass
+
 
 def test_obtener_lista_ciudades():
     distancias = [
