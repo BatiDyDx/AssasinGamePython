@@ -1,5 +1,6 @@
 import random
 import sys
+from typing import Dict
 
 random.seed(10)
 
@@ -296,8 +297,8 @@ def jugada_entre_regiones(ganadores_regionales, conjunto_ciudades, distancia_max
         if peleadores_potenciales == []:
             ganadores_locales.append(jugador1)
         else:
-            #se elije el jugador 2 de los posibles peleadores
-            jugador2 = random.choice(peleadores_potenciales)
+            #se elije el jugador 2 de los posibles peleadores mas cercano
+            jugador2 = jugador_mas_cercano(jugador1,peleadores_potenciales,dict_ciudades_distancia)
             # Se genera un ganador y un perdedor de entre los elegidos
             ganador, perdedor = duelo(jugador1, jugador2)
             #Removemos el perdedor de los jugadores restantes
@@ -313,9 +314,27 @@ def jugada_entre_regiones(ganadores_regionales, conjunto_ciudades, distancia_max
     else:
         anunciar_varios_ganadores(ganadores_locales, archivo_output)
 
+def jugador_mas_cercano(jugador1, peleadores_potenciales,dict_ciudades_distancia):
+    """
+    jugador_mas_cercano : Tuple(String,Int,String),List(Tuple(String,Int,String)),Dict{(String,String):Float}
+    -> Tuple(String,Int,String)
+    Recibe el jugador, sus posibles jugadores y el diccionario de distancias
+    y devuelve el que esta a menor distancia del jugador
+    """
+    jugador_mas_cercano = []
+    dict_jugadores_dist = dict()
+    #itera sobre todos los jugadores potenciales
+    for jugador in peleadores_potenciales:
+        #guarda la distancia de jugadorN en un variable
+        distancia = obtener_dist_localidades(dict_ciudades_distancia,jugador1[2],jugador[2])
+        #añade a un diccionario con la clave del jugador y valor la distancia
+        dict_jugadores_dist[jugador] = distancia 
+    #checkea los valores mas chicos que hay en el diccionario y devuelve el mas chico
+    jugador_mas_cercano = min(dict_jugadores_dist, key = dict_jugadores_dist.get)
+    return jugador_mas_cercano
 
 
-def anunciar_ganador(ganador, archivo_output):
+def anunciar_ganador(ganador, archivo_output,):
     """
     anunciar_ganador : Tuple(String, Int, String) String -> None
     Recibe una tupla que representa al jugador ganador, y el nombre
@@ -377,7 +396,7 @@ def main():
     jugadores = generar_lista_jugadores(archivo_jugadores)
 
     # Reducimos la cantidad de jugadores para realizar pruebas
-    jugadores = jugadores
+    jugadores = jugadores[:1000]
 
     # Separamos la lista de jugadores entre los que son menores y mayores de edad
     jugadores_menores, jugadores_mayores = separar_edades(jugadores)

@@ -45,6 +45,10 @@ def test_obtener_jugadores_por_ciudad():
     jugadores = [("ROBERTO ALMEIDO",20,"Rosario"),("JUAN MANUEL",5,"Rio Cuarto"),("JOSE MIGUEL",1,"CABA")]
     assert obtener_jugadores_por_ciudad(jugadores,set_ciudades) == {"CABA":[("JOSE MIGUEL",1,"CABA")],"Rio Cuarto":[("JUAN MANUEL",5,"Rio Cuarto")],"Rosario":[("ROBERTO ALMEIDO",20,"Rosario")]}
 
+def test_jugador_mas_cercano():
+    pass
+
+
 def test_obtener_lista_ciudades():
     distancias = [
                 ("CABA", "Rosario", 299.9),
