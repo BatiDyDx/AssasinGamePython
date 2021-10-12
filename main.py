@@ -1,7 +1,6 @@
 import random
 import sys
 
-random.seed(10)
 
 def obtener_dist_maxima():
     """
@@ -312,7 +311,7 @@ def jugada_entre_regiones(ganadores_regionales, conjunto_ciudades, distancia_max
             ganadores_copia.remove(jugador1)
         else:
             # Se elije el jugador 2 como el más cercano de entre los peleadores potenciales
-            jugador2 = jugador_mas_cercano(jugador1,peleadores_potenciales,dict_ciudades_distancia)
+            jugador2 = jugador_mas_cercano(jugador1, peleadores_potenciales, dict_ciudades_distancia)
             # Se genera un ganador y un perdedor de entre los elegidos
             ganador, perdedor = duelo(jugador1, jugador2)
             #Removemos el perdedor de los jugadores restantes
@@ -340,7 +339,7 @@ def jugador_mas_cercano(jugador1, peleadores_potenciales, dict_ciudades_distanci
     # Itera sobre todos los jugadores potenciales
     for jugador in peleadores_potenciales:
         # Guarda la distancia de jugador en un variable
-        distancia = obtener_dist_localidades(dict_ciudades_distancia,jugador1[2],jugador[2])
+        distancia = obtener_dist_localidades(dict_ciudades_distancia, jugador1[2], jugador[2])
         # Añade a un diccionario con la clave del jugador y como valor la distancia
         dict_jugadores_dist[jugador] = distancia 
     # Devuelve el elemento con el valor mas chico en el diccionario
