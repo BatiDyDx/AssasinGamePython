@@ -1,0 +1,3 @@
+CABA, Cordoba, 696.4
+CABA, Rio Cuarto, 617.8
+CABA, Rosario, 299.9 
