@@ -22,7 +22,7 @@ def obtener_archivo_salida():
     será jugadas.txt
     """
     valor_defecto = "jugadas.txt"
-    nombre_archivo = input("Ingrese un nombre para el archivo de salida: (por defecto es " + valor_defecto + ")")
+    nombre_archivo = input("Ingrese un nombre para el archivo de salida: (por defecto es " + valor_defecto + "): ")
     # Si el usuario no introduce ningun valor, retornamos el valor por defecto
     if nombre_archivo == "":
         nombre_archivo = valor_defecto
@@ -184,6 +184,12 @@ def obtener_set_ciudades(dict_ciudades_distancias):
 
 
 def obtener_jugadores_por_ciudad(jugadores, conjunto_ciudades):
+    """
+    obtener_jugadores_por_ciudad : List(Tuple(String, Int, String)) Set(String) -> Dict(String : List(Tuple(String, Int, String)))
+    obtener_jugadores_por_ciudad toma una lista de jugadores, y un conjunto de nombres
+    de ciudades, y devuelve un diccionario, donde las llaves corresponden a ciudades, y los valores
+    son las listas de jugadores que se encuentran en la respectiva ciudad.
+    """
     dict_ciudad_jugadores = dict() 
     # Recorremos sobre las ciudades en el conjunto de ciudades
     for ciudad in conjunto_ciudades:
@@ -220,6 +226,10 @@ def jugada_por_localidad(jugadores, conjunto_ciudades, archivo_output):
         # por lo que incrementamos el contador de ciudades con ganador en 1
         if len(dict_ciudad_jugadores[ciudad]) <= 1:
             cant_ciudades_con_ganador += 1
+
+            # Si hay solo un jugador, lo añadimos como ganador de se región
+            if len(dict_ciudad_jugadores[ciudad]) == 1:
+                ganadores_regionales.append(dict_ciudad_jugadores[ciudad][0])
 
     with open(archivo_output, "a") as f:
         # Mientras la cantidad de ciudades con ganador sea menor a la cantidad
@@ -273,10 +283,11 @@ def jugada_por_regiones(ganadores_regionales, conjunto_ciudades, distancia_maxim
     for _ in range(len(ganadores_copia) - 1):
         peleadores_potenciales = []
         jugador1 = random.choice(ganadores_copia)
+        ganadores_copia.remove(jugador1)
         ciudades_cercanas = list(filter(lambda ciudad: distancia_valida(distancia_maxima, dict_ciudades_distancia, jugador1[2], ciudad), conjunto_ciudades))
 
         for peleador in ganadores_copia:
-            if peleador[2] in ciudades_cercanas and peleador != jugador1:
+            if peleador[2] in ciudades_cercanas:
                 peleadores_potenciales.append(peleador)
 
         if peleadores_potenciales == []:
@@ -284,45 +295,9 @@ def jugada_por_regiones(ganadores_regionales, conjunto_ciudades, distancia_maxim
 
         else:
             jugador2 = random.choice(peleadores_potenciales)
+            ganadores_copia.remove(jugador2)
             ganador, perdedor = duelo(jugador1, jugador2)
-            ganadores_copia.remove(perdedor)
-            linea = ganador[0] + " eliminó a " + perdedor[0] + "\n"
-            f.write(linea)
-    f.close()
-
-    if ganadores_locales == []:
-        anunciar_ganador(ganador, archivo_output)
-    else:
-        anunciar_varios_ganadores(ganadores_locales, archivo_output)
-
-
-def jugada_por_regiones(ganadores_regionales, conjunto_ciudades, distancia_maxima, dict_ciudades_distancia, archivo_output):
-    """
-    jugada_por_regiones : List(Tuple(String, Int, String)) Set(String) Float Dict(Tuple(String, String) : Float) String -> None
-    jugada_por_regiones simula los enfrentamientos de los ganadores_regionales, siempre y cuando esten dentro del rango
-    permitido, y escribe la informacion de los enfrentamientos al archivo de salida. Tambien escribe al archivo de salida
-    quien es el ganador, o ganadores en caso de haberlos.
-    """
-    ganadores_locales = []
-    ganadores_copia = ganadores_regionales[:]
-    # Mezclamos la lista de ganadores regionales
-    random.shuffle(ganadores_regionales)
-
-    f = open(archivo_output, 'a')
-    # Iteramos sobre los ganadores regionales
-    for jugador1 in ganadores_regionales:
-        peleadores_potenciales = []
-        # Definimos la lista de ciudades que se encuentrar a un rango valido de la ciudad del jugador 1
-        ciudades_cercanas = list(filter(lambda ciudad: distancia_valida(distancia_maxima, dict_ciudades_distancia, jugador1[2], ciudad), conjunto_ciudades))
-        for peleador in ganadores_copia:
-            if peleador[2] in ciudades_cercanas and peleador != jugador1:
-                peleadores_potenciales.append(peleador)
-        if peleadores_potenciales == []:
-            ganadores_locales.append(jugador1)
-        else:
-            jugador2 = random.choice(peleadores_potenciales)
-            ganador, perdedor = duelo(jugador1, jugador2)
-            ganadores_copia.remove(perdedor)
+            ganadores_copia.append(ganador)
             linea = ganador[0] + " eliminó a " + perdedor[0] + "\n"
             f.write(linea)
     f.close()
@@ -371,6 +346,7 @@ def iniciar_juego(categoria, archivo_output):
     with open(archivo_output, 'a') as f:
         f.write(categoria + '\n')
 
+
 def limpiar(archivo_output):
     """
     limpiar : String -> None
@@ -395,11 +371,11 @@ def main():
     jugadores = generar_lista_jugadores(archivo_jugadores)
 
     # Reducimos la cantidad de jugadores para realizar pruebas
-    jugadores = jugadores
+    jugadores = jugadores[:1000]
 
     # Separamos la lista de jugadores entre los que son menores y mayores de edad
     jugadores_menores, jugadores_mayores = separar_edades(jugadores)
-    
+
     # Obtenemos el diccionario {(localidad1, localidad2) : distancia}
     distancias_localidades = generar_dict_distancias(archivo_distancias)
 
