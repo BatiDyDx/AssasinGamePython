@@ -409,9 +409,6 @@ def main():
     # Definimos la lista de tuplas de la forma (nombre, edad, localidad)
     jugadores = generar_lista_jugadores(archivo_jugadores)
 
-    # Reducimos la cantidad de jugadores para realizar pruebas
-    #jugadores = jugadores
-
     # Separamos la lista de jugadores entre los que son menores y mayores de edad
     jugadores_menores, jugadores_mayores = separar_edades(jugadores)
 
