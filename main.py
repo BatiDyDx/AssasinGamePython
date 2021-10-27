@@ -159,6 +159,7 @@ def obtener_dist_localidades(dict_ciudades_distancias, localidad1, localidad2):
             # distancias estan ordenadas
             return distancia_localidades
 
+
 def distancia_valida(distancia_maxima, dict_ciudades_distancia, ciudad1, ciudad2):
     """
     distancia_valida : Float Dict(Tuple(String, String) : Float) String String -> Bool
@@ -408,9 +409,6 @@ def main():
     
     # Definimos la lista de tuplas de la forma (nombre, edad, localidad)
     jugadores = generar_lista_jugadores(archivo_jugadores)
-
-    # Reducimos la cantidad de jugadores para realizar pruebas
-    #jugadores = jugadores
 
     # Separamos la lista de jugadores entre los que son menores y mayores de edad
     jugadores_menores, jugadores_mayores = separar_edades(jugadores)
